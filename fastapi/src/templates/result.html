@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Diploi - SEO Preview Result</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen p-4 flex flex-col items-center">
+  <div class="w-full max-w-3xl space-y-6">
+
+    <!-- Header / Back -->
+    <div class="flex items-start justify-between">
+      <div class="space-y-1">
+        <h1 class="text-xl font-semibold text-slate-800">Result</h1>
+        <p class="text-sm text-slate-500 break-all">
+          <span class="font-medium text-slate-700">URL:</span>
+          {{ input_url }}
+        </p>
+        <p class="text-xs text-slate-400">
+          HTTP status: {{ status_code }}
+        </p>
+      </div>
+
+      <a
+        href="/"
+        class="rounded-lg bg-white border border-slate-300 text-slate-700 text-xs font-medium px-3 py-2 shadow-sm hover:bg-slate-50"
+      >
+        ← New check
+      </a>
+    </div>
+
+    <!-- Preview Card -->
+    <div class="bg-white rounded-2xl shadow p-5 flex flex-col md:flex-row gap-4">
+      {% if meta.og_image %}
+        <div class="flex-shrink-0 w-full md:w-48 h-48 bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center border border-slate-200">
+          <img
+            src="{{ meta.og_image }}"
+            alt="OG image preview"
+            class="object-cover w-full h-full"
+            onerror="this.style.display='none';"
+          />
+        </div>
+      {% else %}
+        <div class="flex-shrink-0 w-full md:w-48 h-48 bg-slate-50 rounded-xl border border-dashed border-slate-300 flex items-center justify-center text-slate-400 text-xs text-center p-4">
+          No og:image found
+        </div>
+      {% endif %}
+
+      <div class="flex-1 min-w-0 space-y-3">
+        <div>
+          <div class="text-[11px] uppercase text-slate-400 font-medium tracking-wide">Title</div>
+          <div class="text-base font-semibold text-slate-800 break-words">
+            {{ meta.title or meta.og_title or "—" }}
+          </div>
+        </div>
+
+        <div>
+          <div class="text-[11px] uppercase text-slate-400 font-medium tracking-wide">Description</div>
+          <div class="text-sm text-slate-600 break-words">
+            {{ meta.meta_description or "—" }}
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-x-6 gap-y-3 text-[11px]">
+          <div class="space-y-1">
+            <div class="uppercase text-slate-400 font-medium tracking-wide">Canonical</div>
+            <div class="text-slate-600 break-all">
+              {{ meta.canonical or "—" }}
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <div class="uppercase text-slate-400 font-medium tracking-wide">Robots</div>
+            <div class="text-slate-600 break-all">
+              {{ meta.robots or "—" }}
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <div class="uppercase text-slate-400 font-medium tracking-wide">Twitter Card</div>
+            <div class="text-slate-600 break-all">
+              {{ meta.twitter_card or "—" }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Details Grid -->
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-white rounded-2xl shadow p-4 space-y-3">
+        <h2 class="text-sm font-semibold text-slate-700">Meta / Open Graph</h2>
+
+        <div class="text-xs text-slate-500 space-y-2">
+          <div>
+            <div class="font-medium text-slate-600">og:title</div>
+            <div class="break-words">{{ meta.og_title or "—" }}</div>
+          </div>
+
+          <div>
+            <div class="font-medium text-slate-600">og:description</div>
+            <div class="break-words">{{ meta.og_description or "—" }}</div>
+          </div>
+
+          <div>
+            <div class="font-medium text-slate-600">og:url</div>
+            <div class="break-words">{{ meta.og_url or "—" }}</div>
+          </div>
+
+          <div>
+            <div class="font-medium text-slate-600">og:type</div>
+            <div class="break-words">{{ meta.og_type or "—" }}</div>
+          </div>
+
+          <div>
+            <div class="font-medium text-slate-600">twitter:site</div>
+            <div class="break-words">{{ meta.twitter_site or "—" }}</div>
+          </div>
+
+          <div>
+            <div class="font-medium text-slate-600">favicon</div>
+            <div class="break-all">{{ meta.favicon or "—" }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow p-4 space-y-3">
+        <h2 class="text-sm font-semibold text-slate-700">Page extras</h2>
+
+        <div class="text-xs text-slate-500 space-y-2">
+          <div>
+            <div class="font-medium text-slate-600">Language (&lt;html lang=&gt;)</div>
+            <div>{{ raw.lang or "—" }}</div>
+          </div>
+
+          <div>
+            <div class="font-medium text-slate-600">First H1(s)</div>
+            {% if raw.h1 and raw.h1|length > 0 %}
+              <ul class="list-disc pl-4 space-y-1">
+              {% for h in raw.h1 %}
+                <li class="break-words">{{ h }}</li>
+              {% endfor %}
+              </ul>
+            {% else %}
+              <div>—</div>
+            {% endif %}
+          </div>
+
+          <div>
+            <div class="font-medium text-slate-600">Raw meta tags (first 50)</div>
+            <div class="max-h-48 overflow-y-auto bg-slate-50 border border-slate-200 rounded-lg p-2 text-[10px] leading-relaxed text-slate-600">
+              {% for m in raw.meta_tags %}
+                <div class="mb-2">
+                  <div><span class="text-slate-400">name:</span> {{ m.name or "—" }}</div>
+                  <div><span class="text-slate-400">property:</span> {{ m.property or "—" }}</div>
+                  <div class="break-words"><span class="text-slate-400">content:</span> {{ m.content or "—" }}</div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center text-[11px] text-slate-400">
+      <a href="/" class="underline hover:text-slate-600">Run another URL</a>
+    </div>
+
+  </div>
+</body>
+</html>
